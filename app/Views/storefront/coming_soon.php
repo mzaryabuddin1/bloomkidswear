@@ -51,18 +51,11 @@
             text-align: center;
         }
 
-        .logo-wrap {
-            width: min(100%, 16rem);
-            margin: 0 auto 1rem;
-            overflow: hidden;
-            line-height: 0;
-        }
-
         .logo {
-            width: 100%;
+            width: min(100%, 16rem);
             height: auto;
+            margin: 0 auto 1.25rem;
             display: block;
-            margin-bottom: -42%;
         }
 
         .badge {
@@ -131,8 +124,8 @@
                 padding: 1rem;
             }
 
-            .logo-wrap {
-                margin-bottom: 0.75rem;
+            .logo {
+                margin-bottom: 1rem;
             }
 
             .card {
@@ -147,12 +140,10 @@
 </head>
 <body>
     <main class="coming-soon">
-        <div class="logo-wrap">
-            <img
-                class="logo"
-                src="<?= base_url('assets/frontend/images/logo/bloom-logo.png') ?>"
-                alt="Bloom Kids Wear">
-        </div>
+        <img
+            class="logo"
+            src="<?= base_url('assets/frontend/images/logo/bloom-logo.png') ?>"
+            alt="Bloom Kids Wear">
 
         <span class="badge">Launching Soon</span>
 

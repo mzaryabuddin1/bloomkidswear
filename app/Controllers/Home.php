@@ -17,4 +17,9 @@ class Home extends BaseController
 
         return view('storefront/home');
     }
+
+    public function landing(): string
+    {
+        return view('storefront/home');
+    }
 }

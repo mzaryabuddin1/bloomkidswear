@@ -4,6 +4,7 @@ use CodeIgniter\Router\RouteCollection;
 
 /** @var RouteCollection $routes */
 $routes->get('/', 'Home::index');
+$routes->get('home', 'Home::landing');
 
 $routes->post('account/login', 'Account::login');
 $routes->post('account/signup', 'Account::signup');
