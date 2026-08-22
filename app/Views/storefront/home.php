@@ -40,6 +40,25 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/'); ?>css/plugins/bootstrap-select.min.css">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/'); ?>css/plugins/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="<?php echo base_url('assets/frontend/'); ?>css/style.min.css">
+    <style>
+        :root {
+            --color-primary: #233b61;
+            --color-brand-50: #f2f4f8;
+            --color-brand-100: #e6eaf1;
+            --color-brand-200: #cfd7e4;
+            --color-brand-300: #a8b6cb;
+            --color-brand-400: #7a90b0;
+            --color-brand-500: #556f93;
+            --color-brand-600: #3a557a;
+            --color-brand-700: #233b61;
+        }
+
+        .rbt-header .logo img,
+        .rbt-popup-mobile-menu .logo img {
+            max-height: 48px;
+            width: auto;
+        }
+    </style>
 </head>
 
 
@@ -117,6 +136,7 @@
                                 <div class="header-info">
                                     <a href="#" class="rbt-access-link">Track Your Order</a>
                                 </div>
+                                <!-- Currency & Language dropdowns (hidden for now)
                                 <div class="header-info">
                                     <ul class="rbt-dropdown-menu rbt-dropdown-menu-elastic currency-menu">
                                         <li class="has-child-menu">
@@ -177,6 +197,7 @@
                                         </li>
                                     </ul>
                                 </div>
+                                -->
                             </li>
                         </ul>
                     </div>
@@ -198,7 +219,7 @@
                     <div class="header-info">
                         <div class="logo">
                             <a href="index.html">
-                                <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Ecommerce Logo Images">
+                                <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                             </a>
                         </div>
                     </div>
@@ -812,7 +833,8 @@
             <div class="rbt-main-navigation d-none d-xl-block">
                 <nav class="rbt-mainmenu-nav">
     <ul class="mainmenu has-nav-bg-shape-hover">
-        <li class="with-rbt-megamenu has-menu-child-item position-static rbt-initial-odo-count">
+        <?php if (false) : // Demos nav tab hidden for now ?>
+<li class="with-rbt-megamenu has-menu-child-item position-static rbt-initial-odo-count">
             <a href="#!">Demos <i class="fa-regular fa-chevron-down"></i></a>
             <!-- Start Mega Menu  -->
 <div class="rbt-megamenu rbt-prsentation-megamenu rbt-width-fullscreen">
@@ -1051,6 +1073,8 @@
 </div>
 <!-- End Mega Menu  -->
         </li>
+<?php endif; ?>
+
 
         <li class="with-rbt-megamenu has-menu-child-item position-static">
             <a href="#!">Shop <i class="fa-regular fa-chevron-down"></i></a>
@@ -2572,7 +2596,7 @@
                     <div class="header-info d-xl-block d-none">
                         <div class="logo rbt-logo-height-sm">
                             <a href="index.html">
-                                <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Ecommerce Logo Images">
+                                <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                             </a>
                         </div>
                     </div>
@@ -2591,7 +2615,7 @@
             <div class="header-info d-xl-none d-block">
                 <div class="logo">
                     <a href="index.html">
-                        <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Ecommerce Logo Images">
+                        <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                     </a>
                 </div>
             </div>
@@ -2600,7 +2624,8 @@
                 <div class="header-info">
                     <nav class="rbt-mainmenu-nav">
     <ul class="mainmenu mainmenu has-nav-bg-shape-hover">
-        <li class="with-rbt-megamenu has-menu-child-item position-static rbt-initial-odo-count">
+        <?php if (false) : // Demos nav tab hidden for now ?>
+<li class="with-rbt-megamenu has-menu-child-item position-static rbt-initial-odo-count">
             <a href="#!">Demos <i class="fa-regular fa-chevron-down"></i></a>
             <!-- Start Mega Menu  -->
 <div class="rbt-megamenu rbt-prsentation-megamenu rbt-width-fullscreen">
@@ -2839,6 +2864,8 @@
 </div>
 <!-- End Mega Menu  -->
         </li>
+<?php endif; ?>
+
 
         <li class="with-rbt-megamenu has-menu-child-item position-static">
             <a href="#!">Shop <i class="fa-regular fa-chevron-down"></i></a>
@@ -4808,7 +4835,7 @@
                 <div class="content">
                     <div class="logo">
                         <a href="index.html">
-                            <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Unimart Logo Images">
+                            <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                         </a>
                     </div>
                     <div class="rbt-btn-close">
@@ -6307,7 +6334,7 @@
                         <div class="rbt-categories-sidebar-top-content mb--24">
                             <div class="logo">
                                 <a href="index.html">
-                                    <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Unimart Logo">
+                                    <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                                 </a>
                             </div>
                             <button class="rbt-sidebar-close-btn">
@@ -7396,8 +7423,8 @@
                                         <div
                                             class="rbt-card-img rbt-card-img-bg-blue rbt-rounded--24 rbt-scroll-trigger zoom_in animation-order-1">
                                             <a href="product-single-fashion.html"><img
-                                                    src="<?php echo base_url('assets/frontend/'); ?>images/product-img/fashion/product-transparent-01.webp"
-                                                    alt="Card Image"></a>
+                                                    src="<?php echo base_url('assets/frontend/'); ?>images/gallery/bloom-mannequin.png"
+                                                    alt="Bloom Kids Wear Collection"></a>
                                             <div
                                                 class="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                                                 <div class="rbt-corner-portion-wrapper">
@@ -7434,8 +7461,8 @@
                                         <div
                                             class="rbt-card-img rbt-card-img-bg-yellow rbt-rounded--24 rbt-scroll-trigger zoom_in animation-order-2">
                                             <a href="product-single-fashion.html"><img
-                                                    src="<?php echo base_url('assets/frontend/'); ?>images/product-img/fashion/product-transparent-02.webp"
-                                                    alt="Card Image"></a>
+                                                    src="<?php echo base_url('assets/frontend/'); ?>images/gallery/bloom-mannequin.png"
+                                                    alt="Bloom Kids Wear Collection"></a>
                                             <div
                                                 class="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                                                 <div class="rbt-corner-portion-wrapper">
@@ -7471,8 +7498,8 @@
                                         <div
                                             class="rbt-card-img rbt-card-img-bg-green rbt-rounded--24 rbt-scroll-trigger zoom_in animation-order-3">
                                             <a href="product-single-fashion.html"><img
-                                                    src="<?php echo base_url('assets/frontend/'); ?>images/product-img/fashion/product-transparent-03.webp"
-                                                    alt="Card Image"></a>
+                                                    src="<?php echo base_url('assets/frontend/'); ?>images/gallery/bloom-mannequin.png"
+                                                    alt="Bloom Kids Wear Collection"></a>
                                             <div
                                                 class="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                                                 <div class="rbt-corner-portion-wrapper">
@@ -7508,8 +7535,8 @@
                                         <div
                                             class="rbt-card-img rbt-card-img-bg-blue rbt-rounded--24 rbt-scroll-trigger zoom_in animation-order-1">
                                             <a href="product-single-fashion.html"><img
-                                                    src="<?php echo base_url('assets/frontend/'); ?>images/product-img/fashion/product-transparent-01.webp"
-                                                    alt="Card Image"></a>
+                                                    src="<?php echo base_url('assets/frontend/'); ?>images/gallery/bloom-mannequin.png"
+                                                    alt="Bloom Kids Wear Collection"></a>
                                             <div
                                                 class="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                                                 <div class="rbt-corner-portion-wrapper">
@@ -7545,8 +7572,8 @@
                                         <div
                                             class="rbt-card-img rbt-card-img-bg-yellow rbt-rounded--24 rbt-scroll-trigger zoom_in animation-order-2">
                                             <a href="product-single-fashion.html"><img
-                                                    src="<?php echo base_url('assets/frontend/'); ?>images/product-img/fashion/product-transparent-02.webp"
-                                                    alt="Card Image"></a>
+                                                    src="<?php echo base_url('assets/frontend/'); ?>images/gallery/bloom-mannequin.png"
+                                                    alt="Bloom Kids Wear Collection"></a>
                                             <div
                                                 class="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                                                 <div class="rbt-corner-portion-wrapper">
@@ -7581,8 +7608,8 @@
                                         <div
                                             class="rbt-card-img rbt-card-img-bg-green rbt-rounded--24 rbt-scroll-trigger zoom_in animation-order-3">
                                             <a href="product-single-fashion.html"><img
-                                                    src="<?php echo base_url('assets/frontend/'); ?>images/product-img/fashion/product-transparent-03.webp"
-                                                    alt="Card Image"></a>
+                                                    src="<?php echo base_url('assets/frontend/'); ?>images/gallery/bloom-mannequin.png"
+                                                    alt="Bloom Kids Wear Collection"></a>
                                             <div
                                                 class="rbt-right-corner-portion rbt-right-corner-portion-lg show-rbt-right-corner-portion">
                                                 <div class="rbt-corner-portion-wrapper">
@@ -13575,7 +13602,7 @@
                         <div class="rbt-login-form-top">
                             <div class="logo">
                                 <a href="index.html">
-                                    <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Ecommerce Logo Images">
+                                    <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                                 </a>
                             </div>
                             <h3 class="rbt-title rbt-text-bold mb--16 h6" id="signinModalLabel">Sign In To Proceed</h3>
@@ -13809,7 +13836,7 @@
                         <div class="rbt-login-form-top">
                             <div class="logo">
                                 <a href="index.html">
-                                    <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/logo.webp" alt="Ecommerce Logo Images">
+                                    <img src="<?php echo base_url('assets/frontend/'); ?>images/logo/bloom-logo-header.png" alt="Bloom Kids Wear">
                                 </a>
                             </div>
                             <h3 class="rbt-title rbt-text-bold mb--16 h6" id="signupModalLabel">Create an Account</h3>

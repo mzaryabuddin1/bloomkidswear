@@ -15,9 +15,9 @@
             --bloom-coral: #f2746e;
             --bloom-coral-dark: #e05f59;
             --bloom-mint: #74bba6;
-            --bloom-navy: #223b63;
+            --bloom-navy: #233b61;
             --bloom-cream: #fffdf9;
-            --bloom-ink: #223b63;
+            --bloom-ink: #233b61;
             --bloom-muted: #5f6b7a;
         }
 
