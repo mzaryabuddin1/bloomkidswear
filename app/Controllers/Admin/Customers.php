@@ -9,7 +9,12 @@ class Customers extends BaseController
 {
     public function index()
     {
-        $customers = (new CustomerModel())->orderBy('id', 'DESC')->findAll();
+        $model = new CustomerModel();
+        $q = trim((string) $this->request->getGet('q'));
+        if ($q !== '') {
+            $model->groupStart()->like('name', $q)->orLike('email', $q)->orLike('phone', $q)->groupEnd();
+        }
+        $customers = $model->orderBy('id', 'DESC')->findAll();
 
         return view('admin/customers/index', [
             'title'      => 'Customers',
@@ -17,6 +22,7 @@ class Customers extends BaseController
             'adminEmail' => session()->get('admin_email'),
             'activeNav'  => 'customers',
             'customers'  => $customers,
+            'q'          => $q,
         ]);
     }
 

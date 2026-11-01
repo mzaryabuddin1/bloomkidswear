@@ -39,6 +39,8 @@ class Filters extends BaseFilters
         'performance'   => PerformanceMetrics::class,
         'adminAuth'     => AdminAuth::class,
         'adminGuest'    => AdminGuest::class,
+        'customerAuth'  => \App\Filters\CustomerAuth::class,
+        'customerGuest' => \App\Filters\CustomerGuest::class,
         'permission'    => PermissionFilter::class,
     ];
 
@@ -63,7 +65,6 @@ class Filters extends BaseFilters
         'after' => [
             'pagecache',   // Web Page Caching
             'performance', // Performance Metrics
-            'toolbar',     // Debug Toolbar
         ],
     ];
 

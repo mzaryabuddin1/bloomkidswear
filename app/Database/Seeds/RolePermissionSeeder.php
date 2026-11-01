@@ -18,6 +18,12 @@ class RolePermissionSeeder extends Seeder
             ['key' => 'admins.manage', 'label' => 'Create and edit admin users', 'group_name' => 'Admin users'],
             ['key' => 'customers.view', 'label' => 'View customers', 'group_name' => 'Customers'],
             ['key' => 'customers.manage', 'label' => 'Create and edit customers', 'group_name' => 'Customers'],
+            ['key' => 'products.view', 'label' => 'View products', 'group_name' => 'Products'],
+            ['key' => 'products.manage', 'label' => 'Create and edit products', 'group_name' => 'Products'],
+            ['key' => 'categories.view', 'label' => 'View categories', 'group_name' => 'Categories'],
+            ['key' => 'categories.manage', 'label' => 'Create and edit categories', 'group_name' => 'Categories'],
+            ['key' => 'orders.view', 'label' => 'View orders', 'group_name' => 'Orders'],
+            ['key' => 'orders.manage', 'label' => 'Update orders', 'group_name' => 'Orders'],
         ];
 
         foreach ($permissions as $permission) {
@@ -65,8 +71,8 @@ class RolePermissionSeeder extends Seeder
 
         $map = [
             'super-admin' => array_keys($permissionIds),
-            'store-manager' => ['dashboard.view', 'customers.view', 'customers.manage'],
-            'support' => ['dashboard.view', 'customers.view'],
+            'store-manager' => ['dashboard.view', 'customers.view', 'customers.manage', 'products.view', 'products.manage', 'categories.view', 'categories.manage', 'orders.view', 'orders.manage'],
+            'support' => ['dashboard.view', 'customers.view', 'orders.view', 'products.view'],
         ];
 
         foreach ($map as $slug => $keys) {
