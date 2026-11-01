@@ -1,3 +1,4 @@
+<?php $bellUnread = \App\Libraries\AdminNotify::unread(); ?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -713,7 +714,7 @@
             >
             <a
               data-nav="notifications"
-              href="./notifications.html"
+              href="<?= site_url('admin/notifications') ?>"
               class="block rounded-base px-2 py-2 text-ink-500 transition-colors hover:bg-surface-muted hover:text-ink-900"
               >Notifications</a
             >
@@ -883,17 +884,19 @@
         </form>
       
         <div class="ml-auto flex items-center gap-2 sm:gap-4">
-          <a
-            href="./notifications.html"
-            class="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-ink-700 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-card"
-            aria-label="Notifications, 4 unread"
-          >
-            <i data-lucide="bell" class="h-5 w-5"></i>
-            <span
-              class="absolute right-1 top-1 grid h-5 min-w-5 place-items-center rounded-full bg-danger-500 px-1 text-[11px] font-semibold leading-none text-white"
-              >4</span
-            >
-          </a>
+          <div class="relative" id="bloom-bell">
+            <button type="button" id="bloom-bell-btn" class="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-ink-700 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600" aria-label="Notifications" aria-haspopup="true">
+              <i data-lucide="bell" class="h-5 w-5"></i>
+              <span id="bloom-bell-badge" class="absolute right-1 top-1 grid h-5 min-w-5 place-items-center rounded-full bg-danger-500 px-1 text-[11px] font-semibold leading-none text-white" style="<?= ($bellUnread ?? 0) > 0 ? '' : 'display:none' ?>"><?= ($bellUnread ?? 0) > 99 ? '99+' : (int) ($bellUnread ?? 0) ?></span>
+            </button>
+            <div id="bloom-bell-panel" class="absolute right-0 z-50 mt-2 hidden w-[340px] max-w-[90vw] overflow-hidden rounded-card border border-surface-line bg-surface-card shadow-card">
+              <div class="flex items-center justify-between border-b border-surface-line px-4 py-3">
+                <span class="text-[14px] font-semibold text-ink-900">Notifications</span>
+                <a href="<?= site_url('admin/notifications') ?>" class="text-[13px] font-semibold text-brand-600">View all</a>
+              </div>
+              <div id="bloom-bell-list" class="max-h-[360px] overflow-y-auto"></div>
+            </div>
+          </div>
       
           <button
             type="button"
@@ -949,7 +952,7 @@
                   ><i data-lucide="settings" class="h-[18px] w-[18px] text-ink-500"></i> Profile Setting</a
                 >
                 <a
-                  href="./notifications.html"
+                  href="<?= site_url('admin/notifications') ?>"
                   role="menuitem"
                   class="flex items-center gap-3 rounded-base px-2 py-2 text-[14px] text-ink-700 transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600"
                   ><i data-lucide="bell" class="h-[18px] w-[18px] text-ink-500"></i> Notifications</a
@@ -1100,5 +1103,33 @@
       </div>
     </div>
 
-  </body>
+  <script>
+(function () {
+  var btn = document.getElementById('bloom-bell-btn'), panel = document.getElementById('bloom-bell-panel'),
+      list = document.getElementById('bloom-bell-list'), badge = document.getElementById('bloom-bell-badge');
+  if (!btn) return;
+  var FEED = <?= json_encode(site_url('admin/notifications/feed')) ?>, last = <?= (int) ($bellUnread ?? 0) ?>;
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+  function render(d) {
+    badge.textContent = d.unread > 99 ? '99+' : d.unread;
+    badge.style.display = d.unread > 0 ? '' : 'none';
+    list.innerHTML = d.items.length ? d.items.map(function (n) {
+      return '<a href="' + esc(n.url) + '" class="block border-b border-surface-line px-4 py-3 last:border-0 hover:bg-surface-muted" style="' + (n.read ? '' : 'background:rgba(35,59,97,.06)') + '">' +
+        '<p class="text-[14px] ' + (n.read ? 'font-medium' : 'font-semibold') + ' text-ink-900">' + esc(n.title) + '</p>' +
+        '<p class="text-[13px] text-ink-500">' + esc(n.body) + '</p><p class="mt-0.5 text-[12px] text-ink-400">' + esc(n.ago) + '</p></a>';
+    }).join('') : '<p class="px-4 py-6 text-center text-[14px] text-ink-400">No notifications yet.</p>';
+  }
+  function load() {
+    fetch(FEED, { credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(function (r) { return r.json(); })
+      .then(function (d) { last = d.unread; render(d); })
+      .catch(function () {});
+  }
+  btn.addEventListener('click', function (e) { e.stopPropagation(); panel.classList.toggle('hidden'); if (!panel.classList.contains('hidden')) load(); });
+  document.addEventListener('click', function (e) { if (!panel.contains(e.target)) panel.classList.add('hidden'); });
+  load();
+  setInterval(load, 30000);
+})();
+</script>
+</body>
 </html>

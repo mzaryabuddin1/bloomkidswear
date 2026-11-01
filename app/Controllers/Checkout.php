@@ -158,6 +158,9 @@ class Checkout extends BaseController
         $lib->clear();
         session()->set('last_order', $number);
 
+        \App\Libraries\OrderMailer::sendInvoice((int) $orderId);
+        \App\Libraries\AdminNotify::newOrder((int) $orderId);
+
         return redirect()->to(site_url('checkout/thank-you/' . $number));
     }
 

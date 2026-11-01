@@ -105,7 +105,7 @@ class Cart
                 'sku'       => $p['sku'],
                 'image'     => base_url($p['image']),
                 'image_rel' => $p['image'],
-                'url'       => site_url('shop?q=' . rawurlencode($p['name'])),
+                'url'       => site_url('product/' . $p['slug']),
                 'size'      => $line['size'],
                 'color'     => $p['colors'],
                 'price'     => $price,

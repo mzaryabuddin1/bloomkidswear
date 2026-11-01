@@ -17,28 +17,6 @@ $chk = static fn (bool $on) => $on ? ' checked' : '';
 <div id="bloom-shop-top">
 <?= view('storefront/partials/breadcrumb', ['crumbs' => $f['category'] ? ['Shop' => site_url('shop'), $title => null] : ['Shop' => null]]) ?>
 
-<!-- Banner -->
-<div class="rbt-component-area rbt-page-banner-content">
-    <div class="container">
-        <div class="rbt-component-banner radius-8 rbt-scroll-trigger fade_in animation-order-1">
-            <div class="mega-top-banner bg-three">
-                <div class="rbt-banner-inner w-100">
-                    <div class="rbt-banner-content">
-                        <h2 class="title"><?= esc($title) ?></h2>
-                        <p class="b3 desc">Soft fabrics, bright colours and playful designs for little ones aged 0–12. Buy two, save more.</p>
-                    </div>
-                    <div class="pricing-action d-flex align-items-center rbt-gap--8">
-                        <a class="rbt-btn rbt-btn-sm rbt-btn-black" href="<?= esc($url(['flag' => 'sale', 'category' => null]), 'attr') ?>">Shop Sale</a>
-                    </div>
-                    <a href="<?= esc($url(['flag' => 'new', 'category' => null]), 'attr') ?>" class="product-img position-bottom d-none d-xl-block">
-                        <img src="<?= base_url('assets/frontend/images/gallery/bloom-mannequin.png') ?>" alt="Bloom Kidswear" style="max-height:220px;width:auto">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Category circles -->
 <div class="rbt-component-area rbt-catagories-area pt--32 pt_sm--16 rbt-bg-color-white">
     <div class="container">
@@ -48,7 +26,7 @@ $chk = static fn (bool $on) => $on ? ' checked' : '';
                 <a class="rbt-cat-box rbt-cat-box-1 text-center rbt-scroll-trigger fade_in animation-order-<?= $i + 1 ?>" href="<?= esc($url(['category' => $parent['slug']]), 'attr') ?>">
                     <div class="inner">
                         <div class="rbt-image-portion">
-                            <img src="<?= isset($catImages[$parent['slug']]) ? $img($catImages[$parent['slug']]) : base_url('assets/frontend/images/favicon.png') ?>" alt="<?= esc($parent['name']) ?>">
+                            <img src="<?= !empty($parent['image']) ? $img($parent['image']) : base_url('assets/frontend/images/favicon.png') ?>" alt="<?= esc($parent['name']) ?>">
                         </div>
                         <div class="content"><p class="title"><?= esc($parent['name']) ?></p></div>
                     </div>
@@ -318,13 +296,12 @@ $chk = static fn (bool $on) => $on ? ' checked' : '';
                     <?php foreach ($products as $i => $p):
                         $onSale = $p['sale_price'] !== null && (float) $p['sale_price'] < (float) $p['price'];
                         $badges = array_filter([$p['badge'], $onSale ? '-' . round((1 - $p['sale_price'] / $p['price']) * 100) . '%' : null]);
-                        $colorList = array_filter(explode(',', (string) $p['colors']));
                         ?>
                     <div class="col-xxl-4 col-xl-4 col-lg-6 col-md-6 col-sm-6 col-6 mt--24">
                         <div class="rbt-card rbt-product-card has-hover-box-shadow">
                             <div class="inner rbt-scroll-trigger fade_in animation-order-<?= ($i % 3) + 1 ?>">
                                 <div class="rbt-card-img rbt-has-hover-img rbt-bg-color-default">
-                                    <a href="#">
+                                    <a href="<?= site_url('product/' . $p['slug']) ?>">
                                         <img class="rbt-prd-img" src="<?= $img($p['image']) ?>" alt="<?= esc($p['name']) ?>" loading="lazy">
                                         <img class="rbt-hover-img" src="<?= $img($p['hover_image'] ?: $p['image']) ?>" alt="<?= esc($p['name']) ?>" loading="lazy">
                                     </a>
@@ -341,18 +318,11 @@ $chk = static fn (bool $on) => $on ? ' checked' : '';
                                 </div>
                                 <div class="rbt-card-body">
                                     <a href="<?= esc($url(['category' => $p['category_slug']]), 'attr') ?>" class="rbt-card-subtitle rbt-card-catagories-text"><?= esc($p['category_name']) ?></a>
-                                    <h2 class="rbt-card-title"><a href="#"><?= esc($p['name']) ?></a></h2>
+                                    <h2 class="rbt-card-title"><a href="<?= site_url('product/' . $p['slug']) ?>"><?= esc($p['name']) ?></a></h2>
                                     <div class="rbt-card-rating">
                                         <ul class="rbt-rating-icon-list"><?= $stars((float) $p['rating_avg']) ?></ul>
                                         <p class="rating-digit">(<?= (int) $p['rating_count'] ?>)</p>
                                     </div>
-                                    <?php if ($colorList): ?>
-                                    <div class="d-flex align-items-center mt--8" style="gap:6px">
-                                        <?php foreach (array_slice($colorList, 0, 5) as $c): ?>
-                                        <span title="<?= esc(ucfirst($c)) ?>" style="width:16px;height:16px;border-radius:50%;display:inline-block;background:<?= $colorHex[$c] ?? '#ccc' ?>;border:1px solid #d9dee8"></span>
-                                        <?php endforeach; ?>
-                                    </div>
-                                    <?php endif; ?>
                                     <div class="pricing-part">
                                         <span class="price-text"><?= $money($onSale ? $p['sale_price'] : $p['price']) ?></span>
                                         <?php if ($onSale): ?><del class="rbt-dis-price-text"><?= $money($p['price']) ?></del><?php endif; ?>
@@ -365,10 +335,12 @@ $chk = static fn (bool $on) => $on ? ' checked' : '';
                                     <div class="prd-btn-grp">
                                         <?php $sizeList = array_filter(explode(',', (string) $p['sizes']), 'strlen'); ?>
                                         <?php if ($sizeList): ?>
-                                        <select data-card-size class="w-100 mb--8" aria-label="Select size" style="height:38px;font-size:13px;padding:0 10px;border:1px solid #d9dee8;border-radius:6px;background:#fff">
-                                            <option value="">Select size</option>
-                                            <?php foreach ($sizeList as $sz): ?><option value="<?= esc($sz, 'attr') ?>"><?= esc($sz) ?></option><?php endforeach; ?>
-                                        </select>
+                                        <div class="bloom-size-pills mb--8" role="radiogroup" aria-label="Select size">
+                                            <?php foreach ($sizeList as $k => $sz): $rid = 'sz-' . (int) $p['id'] . '-' . $k; ?>
+                                            <input type="radio" class="bloom-pill-input" name="size-<?= (int) $p['id'] ?>" id="<?= $rid ?>" value="<?= esc($sz, 'attr') ?>" data-card-size>
+                                            <label for="<?= $rid ?>" class="bloom-pill"><?= esc($sz) ?></label>
+                                            <?php endforeach; ?>
+                                        </div>
                                         <?php endif; ?>
                                         <?php if ((int) $p['stock'] > 0): ?>
                                         <a class="rbt-btn rbt-btn-border rbt-btn-sm rbt-square-btn d-block has-left-icon" href="#" data-add-to-cart="<?= (int) $p['id'] ?>"><i class="fa-regular fa-cart-shopping"></i> Add To Cart</a>

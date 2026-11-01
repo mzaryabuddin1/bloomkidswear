@@ -20,6 +20,6 @@
 
 <!-- Main JS -->
 <script src="<?php echo base_url('assets/frontend/'); ?>js/main.min.js"></script>
-<script src="<?= base_url('assets/frontend/js/bloom.js') ?>?v=4"></script>
+<script src="<?= base_url('assets/frontend/js/bloom.js') ?>?v=5"></script>
 </body>
 </html>

@@ -63,6 +63,16 @@
             max-height: 48px;
             width: auto;
         }
+
+        .bloom-size-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+        .bloom-pill-input { position: absolute; opacity: 0; width: 0; height: 0; }
+        .bloom-pill { margin: 0; cursor: pointer; min-width: 40px; padding: 5px 12px; text-align: center; font-size: 13px; line-height: 1.2; border: 1px solid #d9dee8; border-radius: 999px; background: #fff; color: #233b61; transition: all .2s ease; }
+        .bloom-pill:hover { border-color: #233b61; }
+        .bloom-pill-input:checked + .bloom-pill { background: #233b61; border-color: #233b61; color: #fff; }
+        .bloom-pill-input:focus-visible + .bloom-pill { outline: 2px solid #7a90b0; outline-offset: 2px; }
+        .bloom-size-pills.bloom-need { animation: bloomShake .4s; }
+        .bloom-size-pills.bloom-need .bloom-pill { border-color: #dc3545; }
+        @keyframes bloomShake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     </style>
 <?= $headExtra ?? "" ?>
 </head>

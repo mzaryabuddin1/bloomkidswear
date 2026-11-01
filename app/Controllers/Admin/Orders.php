@@ -143,6 +143,9 @@ class Orders extends BaseController
 
         $after = OrderHistory::snapshot($id);
         OrderHistory::record($id, 'status', $status !== $order['status'] ? 'Status changed to ' . self::STATUSES[$status] : 'Tracking details updated', $before, $after);
+        if ($status !== $order['status']) {
+            \App\Libraries\OrderMailer::sendStatus($id);
+        }
 
         return redirect()->to(site_url('admin/orders/' . $id))->with('success', 'Order updated.');
     }
@@ -299,8 +302,12 @@ class Orders extends BaseController
         if ($before) {
             $n = count(OrderHistory::diff($before, $after));
             OrderHistory::record($id, 'updated', $n ? "Order edited ({$n} change" . ($n === 1 ? '' : 's') . ')' : 'Order saved with no changes', $before, $after);
+            if (($before['status'] ?? null) !== $after['status']) {
+                \App\Libraries\OrderMailer::sendStatus($id);
+            }
         } else {
             OrderHistory::record($id, 'created', 'Order created by admin', null, $after);
+            \App\Libraries\OrderMailer::sendInvoice($id);
         }
 
         return redirect()->to(site_url('admin/orders/' . $id))->with('success', $before ? 'Order updated. The previous version is kept in the history.' : 'Order created.');

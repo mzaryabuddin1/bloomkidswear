@@ -40,6 +40,7 @@ $routes->group('wishlist', ['filter' => 'customerAuth'], static function ($route
 // Shop
 $routes->get('shop', 'Shop::index');
 $routes->get('shop/category/(:segment)', 'Shop::index/$1');
+$routes->get('product/(:segment)', 'Product::show/$1');
 
 // Cart & checkout
 $routes->get('cart', 'Cart::index');
@@ -66,6 +67,11 @@ $routes->group('admin', static function ($routes) {
 
     $routes->group('', ['filter' => 'adminAuth'], static function ($routes) {
         $routes->get('dashboard', 'Admin\Dashboard::index');
+
+        $routes->get('notifications', 'Admin\Notifications::index');
+        $routes->get('notifications/feed', 'Admin\Notifications::feed');
+        $routes->post('notifications/read-all', 'Admin\Notifications::readAll');
+        $routes->get('notifications/(:num)/open', 'Admin\Notifications::open/$1');
 
         $routes->get('roles', 'Admin\Roles::index', ['filter' => 'permission:roles.view']);
         $routes->get('roles/create', 'Admin\Roles::create', ['filter' => 'permission:roles.manage']);

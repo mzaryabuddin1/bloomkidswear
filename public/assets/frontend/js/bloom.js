@@ -416,20 +416,46 @@
       var add = e.target.closest('[data-add-to-cart]');
       if (!add) return;
       e.preventDefault();
-      var card = add.closest('.rbt-product-card'), sel = card && card.querySelector('[data-card-size]');
-      var size = sel ? sel.value : (add.getAttribute('data-size') || '');
-      if (sel && !size) {
-        sel.style.borderColor = '#e0457b'; sel.focus(); toast('Please select a size first.');
-        sel.addEventListener('change', function () { sel.style.borderColor = ''; }, { once: true });
-        return;
+      var scope = add.closest('.rbt-product-card, [data-product-scope]');
+      var pills = scope && scope.querySelectorAll('input[data-card-size]');
+      var size = add.getAttribute('data-size') || '';
+      if (pills && pills.length) {
+        var on = scope.querySelector('input[data-card-size]:checked');
+        size = on ? on.value : '';
+        if (!size) {
+          var grp = pills[0].closest('.bloom-size-pills');
+          if (grp) { grp.classList.remove('bloom-need'); void grp.offsetWidth; grp.classList.add('bloom-need'); }
+          toast('Please select a size first.');
+          return;
+        }
       }
+      var qtyInput = scope && scope.querySelector('[data-product-qty]');
+      var qty = qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1;
       if (add.dataset.busy) return;
       add.dataset.busy = '1';
-      cartCall('cart/add', { product_id: add.getAttribute('data-add-to-cart'), size: size, qty: 1 }).then(function (d) {
+      cartCall('cart/add', { product_id: add.getAttribute('data-add-to-cart'), size: size, qty: qty }).then(function (d) {
         if (d.success) { toast(d.message || 'Added to your cart.'); openMiniCart(); } else { toast(d.message || 'Could not add this item.'); }
       }).catch(function () { toast('Something went wrong. Please try again.'); })
         .then(function () { delete add.dataset.busy; });
     });
+
+    // Capture phase so the theme's own +/- handler (which only touches the DOM) never runs for these.
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('.qty-item-btn');
+      if (!btn) return;
+      var area = btn.closest('.rbt-qty-area') || btn.parentNode, input = area.querySelector('input');
+      if (!input) return;
+      var isCart = input.hasAttribute('data-cart-key'), isProduct = input.hasAttribute('data-product-qty');
+      if (!isCart && !isProduct) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      var max = parseInt(input.getAttribute('max'), 10) || 10, cur = parseInt(input.value, 10) || 1;
+      var next = btn.classList.contains('qty-item-btn-incr') ? cur + 1 : cur - 1;
+      if (next > max) { toast('Only ' + max + ' available per order.'); next = max; }
+      next = Math.max(1, next);
+      if (next === cur) return;
+      input.value = isCart ? String(next).padStart(2, '0') : next;
+      if (isCart) cartCall('cart/update', { key: input.getAttribute('data-cart-key'), qty: next }).then(refreshCartPage);
+    }, true);
 
     document.addEventListener('change', function (e) {
       var input = e.target.closest('.items-qty-input[data-cart-key]');

@@ -60,19 +60,6 @@ class PlaceholderImage
             $y += 44;
         }
 
-        // colour dots
-        $colors = array_slice($colors, 0, 6);
-        $dot = 26;
-        $gap = 14;
-        $total = count($colors) * $dot + max(0, count($colors) - 1) * $gap;
-        $x = (int) (($w - $total) / 2) + (int) ($dot / 2);
-        foreach ($colors as $c) {
-            $hex = self::COLOR_HEX[$c] ?? '#cccccc';
-            imagefilledellipse($im, $x, 700, $dot + 4, $dot + 4, self::rgb($im, '#ffffff'));
-            imagefilledellipse($im, $x, 700, $dot, $dot, self::rgb($im, $hex));
-            $x += $dot + $gap;
-        }
-
         if (! is_dir(dirname($path))) {
             mkdir(dirname($path), 0775, true);
         }
