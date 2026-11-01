@@ -417,26 +417,49 @@
       if (!add) return;
       e.preventDefault();
       var scope = add.closest('.rbt-product-card, [data-product-scope]');
-      var pills = scope && scope.querySelectorAll('input[data-card-size]');
-      var size = add.getAttribute('data-size') || '';
-      if (pills && pills.length) {
-        var on = scope.querySelector('input[data-card-size]:checked');
-        size = on ? on.value : '';
-        if (!size) {
+      var pills = scope ? scope.querySelectorAll('.bloom-pill[data-card-size]') : [];
+      var sizes = [];
+      if (pills.length) {
+        pills.forEach(function (p) { if (p.getAttribute('aria-pressed') === 'true') sizes.push(p.getAttribute('data-card-size')); });
+        if (!sizes.length) {
           var grp = pills[0].closest('.bloom-size-pills');
           if (grp) { grp.classList.remove('bloom-need'); void grp.offsetWidth; grp.classList.add('bloom-need'); }
           toast('Please select a size first.');
           return;
         }
+      } else {
+        sizes.push(add.getAttribute('data-size') || '');
       }
       var qtyInput = scope && scope.querySelector('[data-product-qty]');
       var qty = qtyInput ? Math.max(1, parseInt(qtyInput.value, 10) || 1) : 1;
       if (add.dataset.busy) return;
       add.dataset.busy = '1';
-      cartCall('cart/add', { product_id: add.getAttribute('data-add-to-cart'), size: size, qty: qty }).then(function (d) {
-        if (d.success) { toast(d.message || 'Added to your cart.'); openMiniCart(); } else { toast(d.message || 'Could not add this item.'); }
+      // One cart line per selected size, added one after another.
+      var pid = add.getAttribute('data-add-to-cart'), added = 0, lastMsg = '';
+      sizes.reduce(function (chain, size) {
+        return chain.then(function () {
+          return cartCall('cart/add', { product_id: pid, size: size, qty: qty }).then(function (d) {
+            if (d.success) added++; else lastMsg = d.message || 'Could not add this item.';
+          });
+        });
+      }, Promise.resolve()).then(function () {
+        if (added) {
+          toast(added > 1 ? added + ' sizes added to your cart.' : 'Added to your cart.');
+          openMiniCart();
+          if (scope) scope.querySelectorAll('.bloom-pill[aria-pressed="true"]').forEach(function (p) { p.setAttribute('aria-pressed', 'false'); });
+        }
+        if (lastMsg) toast(lastMsg);
       }).catch(function () { toast('Something went wrong. Please try again.'); })
         .then(function () { delete add.dataset.busy; });
+    });
+
+    document.addEventListener('click', function (e) {
+      var pill = e.target.closest('.bloom-pill[data-card-size]');
+      if (!pill) return;
+      e.preventDefault();
+      pill.setAttribute('aria-pressed', pill.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
+      var grp = pill.closest('.bloom-size-pills');
+      if (grp) grp.classList.remove('bloom-need');
     });
 
     // Capture phase so the theme's own +/- handler (which only touches the DOM) never runs for these.

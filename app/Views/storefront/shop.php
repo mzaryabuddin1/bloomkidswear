@@ -335,10 +335,9 @@ $chk = static fn (bool $on) => $on ? ' checked' : '';
                                     <div class="prd-btn-grp">
                                         <?php $sizeList = array_filter(explode(',', (string) $p['sizes']), 'strlen'); ?>
                                         <?php if ($sizeList): ?>
-                                        <div class="bloom-size-pills mb--8" role="radiogroup" aria-label="Select size">
-                                            <?php foreach ($sizeList as $k => $sz): $rid = 'sz-' . (int) $p['id'] . '-' . $k; ?>
-                                            <input type="radio" class="bloom-pill-input" name="size-<?= (int) $p['id'] ?>" id="<?= $rid ?>" value="<?= esc($sz, 'attr') ?>" data-card-size>
-                                            <label for="<?= $rid ?>" class="bloom-pill"><?= esc($sz) ?></label>
+                                        <div class="bloom-size-pills mb--8" role="group" aria-label="Select sizes">
+                                            <?php foreach ($sizeList as $sz): ?>
+                                            <button type="button" class="bloom-pill" data-card-size="<?= esc($sz, 'attr') ?>" aria-pressed="false"><?= esc($sz) ?></button>
                                             <?php endforeach; ?>
                                         </div>
                                         <?php endif; ?>

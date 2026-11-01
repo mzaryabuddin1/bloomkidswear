@@ -4,6 +4,7 @@ namespace App\Libraries;
 
 /**
  * Branded order emails (invoice on a new order, status updates).
+ * Emails are queued (see MailQueue), so checkout never waits on SMTP.
  * Never throws: a mail failure must not break checkout or an admin edit.
  * Set `orderEmails.enabled = false` in .env to switch sending off (local testing).
  */
@@ -72,23 +73,11 @@ class OrderMailer
         }
 
         try {
-            $mail = service('email');
-            $mail->clear();
-            $mail->setTo($order['email']);
-            if ($bcc) {
-                $mail->setBCC(self::BCC);
-            }
-            $mail->setSubject($subject);
-            $mail->setMessage($html);
-            if (! $mail->send(false)) {
-                log_message('error', 'Order email failed (' . $subject . '): ' . $mail->printDebugger(['headers']));
-
-                return false;
-            }
+            MailQueue::enqueue($order['email'], $subject, $html, $bcc ? self::BCC : null);
 
             return true;
         } catch (\Throwable $e) {
-            log_message('error', 'Order email error: ' . $e->getMessage());
+            log_message('error', 'Order email could not be queued: ' . $e->getMessage());
 
             return false;
         }

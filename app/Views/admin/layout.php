@@ -884,17 +884,17 @@
         </form>
       
         <div class="ml-auto flex items-center gap-2 sm:gap-4">
-          <div class="relative" id="bloom-bell">
-            <button type="button" id="bloom-bell-btn" class="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-ink-700 hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600" aria-label="Notifications" aria-haspopup="true">
+          <div id="bloom-bell" style="position:relative">
+            <button type="button" id="bloom-bell-btn" class="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-ink-700 hover:bg-surface-muted" aria-label="Notifications" aria-haspopup="true" aria-expanded="false" style="position:relative">
               <i data-lucide="bell" class="h-5 w-5"></i>
-              <span id="bloom-bell-badge" class="absolute right-1 top-1 grid h-5 min-w-5 place-items-center rounded-full bg-danger-500 px-1 text-[11px] font-semibold leading-none text-white" style="<?= ($bellUnread ?? 0) > 0 ? '' : 'display:none' ?>"><?= ($bellUnread ?? 0) > 99 ? '99+' : (int) ($bellUnread ?? 0) ?></span>
+              <span id="bloom-bell-badge" style="position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#e5484d;color:#fff;font-size:11px;font-weight:600;line-height:18px;text-align:center;<?= ($bellUnread ?? 0) > 0 ? '' : 'display:none' ?>"><?= ($bellUnread ?? 0) > 99 ? '99+' : (int) ($bellUnread ?? 0) ?></span>
             </button>
-            <div id="bloom-bell-panel" class="absolute right-0 z-50 mt-2 hidden w-[340px] max-w-[90vw] overflow-hidden rounded-card border border-surface-line bg-surface-card shadow-card">
-              <div class="flex items-center justify-between border-b border-surface-line px-4 py-3">
-                <span class="text-[14px] font-semibold text-ink-900">Notifications</span>
+            <div id="bloom-bell-panel" class="bg-surface-card border border-surface-line" style="display:none;position:absolute;right:0;top:calc(100% + 8px);z-index:60;width:360px;max-width:calc(100vw - 24px);border-radius:12px;overflow:hidden;box-shadow:0 12px 32px rgba(15,23,42,.18)">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px" class="border-b border-surface-line">
+                <span class="text-[15px] font-semibold text-ink-900">Notifications <span id="bloom-bell-count" class="text-[12px] font-medium text-ink-400"></span></span>
                 <a href="<?= site_url('admin/notifications') ?>" class="text-[13px] font-semibold text-brand-600">View all</a>
               </div>
-              <div id="bloom-bell-list" class="max-h-[360px] overflow-y-auto"></div>
+              <div id="bloom-bell-list" style="max-height:380px;overflow-y:auto"></div>
             </div>
           </div>
       
@@ -1113,11 +1113,15 @@
   function render(d) {
     badge.textContent = d.unread > 99 ? '99+' : d.unread;
     badge.style.display = d.unread > 0 ? '' : 'none';
+    document.getElementById('bloom-bell-count').textContent = d.unread > 0 ? '(' + d.unread + ' new)' : '';
     list.innerHTML = d.items.length ? d.items.map(function (n) {
-      return '<a href="' + esc(n.url) + '" class="block border-b border-surface-line px-4 py-3 last:border-0 hover:bg-surface-muted" style="' + (n.read ? '' : 'background:rgba(35,59,97,.06)') + '">' +
-        '<p class="text-[14px] ' + (n.read ? 'font-medium' : 'font-semibold') + ' text-ink-900">' + esc(n.title) + '</p>' +
-        '<p class="text-[13px] text-ink-500">' + esc(n.body) + '</p><p class="mt-0.5 text-[12px] text-ink-400">' + esc(n.ago) + '</p></a>';
-    }).join('') : '<p class="px-4 py-6 text-center text-[14px] text-ink-400">No notifications yet.</p>';
+      return '<a href="' + esc(n.url) + '" class="hover:bg-surface-muted border-b border-surface-line" style="display:flex;gap:12px;align-items:flex-start;padding:12px 16px;text-decoration:none;' + (n.read ? '' : 'background:rgba(35,59,97,.06);') + '">' +
+        '<span style="flex:none;width:36px;height:36px;border-radius:50%;background:#e6eaf1;color:#233b61;display:grid;place-items:center;font-size:15px">&#128717;</span>' +
+        '<span style="min-width:0;flex:1"><span class="text-ink-900" style="display:block;font-size:14px;font-weight:' + (n.read ? 500 : 600) + '">' + esc(n.title) + '</span>' +
+        '<span class="text-ink-500" style="display:block;font-size:13px;line-height:1.4;margin-top:2px">' + esc(n.body) + '</span>' +
+        '<span class="text-ink-400" style="display:block;font-size:12px;margin-top:3px">' + esc(n.ago) + '</span></span>' +
+        (n.read ? '' : '<span style="flex:none;width:8px;height:8px;border-radius:50%;background:#e5484d;margin-top:6px"></span>') + '</a>';
+    }).join('') : '<p class="text-ink-400" style="padding:28px 16px;text-align:center;font-size:14px">No notifications yet.</p>';
   }
   function load() {
     fetch(FEED, { credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
@@ -1125,8 +1129,8 @@
       .then(function (d) { last = d.unread; render(d); })
       .catch(function () {});
   }
-  btn.addEventListener('click', function (e) { e.stopPropagation(); panel.classList.toggle('hidden'); if (!panel.classList.contains('hidden')) load(); });
-  document.addEventListener('click', function (e) { if (!panel.contains(e.target)) panel.classList.add('hidden'); });
+  btn.addEventListener('click', function (e) { e.stopPropagation(); var open = panel.style.display === 'none'; panel.style.display = open ? 'block' : 'none'; btn.setAttribute('aria-expanded', open ? 'true' : 'false'); if (open) load(); });
+  document.addEventListener('click', function (e) { if (!panel.contains(e.target)) { panel.style.display = 'none'; btn.setAttribute('aria-expanded', 'false'); } });
   load();
   setInterval(load, 30000);
 })();

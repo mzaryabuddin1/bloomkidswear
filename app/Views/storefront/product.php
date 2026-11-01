@@ -90,11 +90,10 @@ $stars = static function (float $rating): string {
 
                     <?php if ($sizes): ?>
                     <div class="mt--24">
-                        <p class="text-bold mb--8">Select size</p>
-                        <div class="bloom-size-pills" role="radiogroup" aria-label="Select size">
-                            <?php foreach ($sizes as $k => $sz): $rid = 'psz-' . $k; ?>
-                            <input type="radio" class="bloom-pill-input" name="size-<?= (int) $p['id'] ?>" id="<?= $rid ?>" value="<?= esc($sz, 'attr') ?>" data-card-size>
-                            <label for="<?= $rid ?>" class="bloom-pill"><?= esc($sz) ?></label>
+                        <p class="text-bold mb--8">Select size <small style="font-weight:400;color:#7a90b0">(pick one or more)</small></p>
+                        <div class="bloom-size-pills" role="group" aria-label="Select sizes">
+                            <?php foreach ($sizes as $sz): ?>
+                            <button type="button" class="bloom-pill" data-card-size="<?= esc($sz, 'attr') ?>" aria-pressed="false"><?= esc($sz) ?></button>
                             <?php endforeach; ?>
                         </div>
                     </div>
