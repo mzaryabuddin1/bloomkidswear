@@ -26,7 +26,7 @@
     <link rel="icon" type="image/png" sizes="256x256" href="<?= base_url("assets/frontend/images/favicon.png") ?>">
     <link rel="apple-touch-icon" href="<?= base_url("assets/frontend/images/apple-touch-icon.png") ?>">
     <meta name="csrf-token" content="<?= csrf_hash() ?>" data-name="<?= csrf_token() ?>">
-    <meta name="base-url" content="<?= base_url("/") ?>">
+    <meta name="base-url" content="<?= site_url("/") ?>">
     <meta name="bloom-auth" content="<?= session("customer_id") ? 1 : 0 ?>">
 
     <!-- CSS
