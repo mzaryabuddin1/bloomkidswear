@@ -42,6 +42,11 @@ $routes->get('shop', 'Shop::index');
 $routes->get('shop/category/(:segment)', 'Shop::index/$1');
 $routes->get('product/(:segment)', 'Product::show/$1');
 
+// Static pages
+foreach (['about-us', 'faqs', 'terms-and-conditions', 'privacy-policy', 'delivery-policy', 'refund-and-return-policy', 'exchange-policy'] as $page) {
+    $routes->get($page, 'Pages::show/' . $page);
+}
+
 // Cart & checkout
 $routes->get('cart', 'Cart::index');
 $routes->get('cart/data', 'Cart::data');
